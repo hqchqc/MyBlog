@@ -9,16 +9,7 @@ export default defineUserConfig<DefaultThemeOptions>({
   base: "/MyBlog/",
   head: [["link", { rel: "icon", href: "/image/header.png" }]],
   plugins: [
-    [
-      "@vuepress/pwa",
-      {
-        serviceWorker: true,
-        updatePopup: {
-          message: "发现新内容可用",
-          buttonText: "刷新",
-        },
-      },
-    ],
+    ["@vuepress/pwa"],
     [
       "@vuepress/plugin-pwa-popup",
       {

@@ -1,0 +1,1 @@
+const t={key:"v-18790e28",path:"/books/ECMAScript6%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B.html",title:"ECMAScript 6 \u5165\u95E8\u6559\u7A0B",lang:"en-US",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:1646463584e3,contributors:[{name:"hqchqc",email:"734986933@qq.com",commits:1}]},filePathRelative:"books/ECMAScript6\u5165\u95E8\u6559\u7A0B.md"};export{t as data};

@@ -1,0 +1,1 @@
+const e={key:"v-1867acce",path:"/frame/Vue.html",title:"Vue",lang:"en-US",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:1646463584e3,contributors:[{name:"hqchqc",email:"734986933@qq.com",commits:1}]},filePathRelative:"frame/Vue.md"};export{e as data};
