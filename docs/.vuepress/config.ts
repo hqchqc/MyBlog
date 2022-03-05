@@ -50,7 +50,7 @@ export default defineUserConfig<DefaultThemeOptions>({
       { text: "框架学习", children: ["/frame/React.md", "/frame/Vue.md"] },
       {
         text: "JavaScript",
-        children: ["/javaScript/Algorithm.md"],
+        children: ["/javaScript/排序算法.md"],
       },
 
       //格式三：跳转至外部网页，需http/https前缀
