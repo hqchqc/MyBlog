@@ -7,7 +7,10 @@ export default defineUserConfig<DefaultThemeOptions>({
   title: "beanBag",
   description: "记录前端开发日常",
   base: "/",
-  head: [["link", { rel: "icon", href: "/image/header.png" }]],
+  head: [
+    ["link", { rel: "icon", href: "/image/header.png" }],
+    ["link", { rel: "shortcut icon", href: "favicon.ico" }],
+  ],
   plugins: [
     ["@vuepress/pwa"],
     [

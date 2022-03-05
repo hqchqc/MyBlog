@@ -4,7 +4,7 @@ heroImage: /image/header.png
 heroText: beanBag's Blog
 actions:
   - text: Get Started 
-    link: /guide/
+    link: /books/ECMAScript6入门教程.md
     type: primary
 features:
 - title: 简介
