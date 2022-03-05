@@ -6,7 +6,6 @@ export default defineUserConfig<DefaultThemeOptions>({
   lang: "en-US",
   title: "beanBag",
   description: "记录前端开发日常",
-  base: "/MyBlog/",
   head: [["link", { rel: "icon", href: "/image/header.png" }]],
   plugins: [
     ["@vuepress/pwa"],
