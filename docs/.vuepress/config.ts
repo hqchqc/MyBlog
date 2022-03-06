@@ -8,27 +8,12 @@ export default defineUserConfig<DefaultThemeOptions>({
   description: "记录前端开发日常",
   base: "/",
   head: [
+    ["link", { rel: "manifest", href: "/manifest.webmanifest" }],
     ["link", { rel: "icon", href: "/image/header.png" }],
     ["link", { rel: "shortcut icon", href: "favicon.ico" }],
+    ["meta", { name: "theme-color", content: "#3eaf7c" }],
   ],
-  plugins: [
-    ["@vuepress/pwa"],
-    [
-      "@vuepress/plugin-pwa-popup",
-      {
-        locales: {
-          "/": {
-            message: "New content is available.",
-            buttonText: "Refresh",
-          },
-          "/zh/": {
-            message: "发现新内容可用",
-            buttonText: "刷新",
-          },
-        },
-      },
-    ],
-  ],
+  plugins: [["@vuepress/pwa"], ["@vuepress/plugin-pwa-popup"]],
 
   // 主题和它的配置
   theme: "@vuepress/theme-default",
