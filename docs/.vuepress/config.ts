@@ -32,7 +32,10 @@ export default defineUserConfig<DefaultThemeOptions>({
           "/books/JavaScript高级程序设计(第四版).md",
         ],
       },
-      { text: "框架学习", children: ["/frame/React.md", "/frame/Vue.md"] },
+      {
+        text: "框架学习",
+        children: ["/frame/React.md", "/frame/Vue2.md", "/frame/Vue3.md"],
+      },
       {
         text: "JavaScript",
         children: ["/javaScript/排序算法.md"],
