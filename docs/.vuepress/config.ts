@@ -12,6 +12,19 @@ export default defineUserConfig<DefaultThemeOptions>({
     ["link", { rel: "icon", href: "/image/header.png" }],
     ["link", { rel: "shortcut icon", href: "favicon.ico" }],
     ["meta", { name: "theme-color", content: "#3eaf7c" }],
+    [
+      "script",
+      {},
+      `
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?41852977b8b2d3e3765fc0b54a74996f";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      `,
+    ],
   ],
   plugins: [["@vuepress/pwa"], ["@vuepress/plugin-pwa-popup"]],
 
