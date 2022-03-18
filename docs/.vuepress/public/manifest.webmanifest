@@ -3,6 +3,7 @@
   "short_name": "beanBag",
   "description": "记录前端开发日常",
   "start_url": "/MyBlog/",
+  "id":" /MyBlog/",
   "display": "standalone",
   "background_color": "#fff",
   "theme_color": "#3eaf7c",
