@@ -41,6 +41,7 @@ export default defineUserConfig<DefaultThemeOptions>({
       {
         text: "前端书籍",
         children: [
+          "/books/TypeScript入门教程.md",
           "/books/ECMAScript6入门教程.md",
           "/books/JavaScript高级程序设计(第四版).md",
         ],
