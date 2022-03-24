@@ -4,7 +4,7 @@ heroImage: /image/header.png
 heroText: beanBag's Blog
 actions:
   - text: ✨Get Started✨
-    link: /javaScript/排序算法.md
+    link: /books/TypeScript入门教程.md
     type: primary
 features:
 - title: 简介
