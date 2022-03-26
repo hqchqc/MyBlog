@@ -3659,8 +3659,6 @@ export function request(config){
 还有一个命令可以让我们省略几步
 ``git remote add origin 复制的项目地址``
 ``git push -u origin master``
-这样就可以直接将本地有的仓库和远程仓库联系起来
+这样就可以直接将本地有的仓库和远程仓库联系起来  
 
-
-
-
+<CommentService />
