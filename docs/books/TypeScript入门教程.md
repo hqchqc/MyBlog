@@ -185,6 +185,220 @@ function alertName(): void {
 声明一个 ``void`` 类型的变量没有什么用，因为你只能将它赋值为 ``undefined`` 和 ``null``（只在 --strictNullChecks 未指定时）：  
 ```typescript
 let unusable: void = undefined;
+```  
+
+### 任意值  
+任意值（Any）用来表示允许赋值为任意类型。  
+
+#### 什么是任意值类型  
+如果是一个普通类型，在赋值过程中改变类型是不被允许的  
+
+```javascript
+let myFavoriteNumber: string = 'seven';
+myFavoriteNumber = 7;
+
+// index.ts(2,1): error TS2322: Type 'number' is not assignable to type 'string'.
+```  
+但如果是 ``any`` 类型，则允许被赋值为任意类型。
+
+```typescript
+let myFavoriteNumber: any = 'seven';
+myFavoriteNumber = 7;
+```  
+
+### 类型推论  
+如果没有明确的指定类型，那么 TypeScript 会依照类型推论（Type Inference）的规则推断出一个类型。  
+
+**如果定义的时候没有赋值，不管之后有没有赋值，都会被推断成 any 类型而完全不被类型检查**  
+
+```typescript
+let myFavoriteNumber;
+myFavoriteNumber = 'seven';
+myFavoriteNumber = 7;
 ```
+
+### 联合类型  
+联合类型（Union Types）表示取值可以为多种类型中的一种。  
+
+#### 例子  
+
+联合类型使用 ``|`` 分隔每个类型。  
+
+```typescript
+let myFavoriteNumber: string | number;
+myFavoriteNumber = 'seven';
+myFavoriteNumber = 7;
+```  
+
+#### 访问联合类型的属性或方法  
+
+当 TypeScript 不确定一个联合类型的变量到底是哪个类型的时候，我们只能访问此联合类型的所有类型里**共有的属性或方法**：  
+
+```typescript
+function myTest(sonmething: string | number):number {
+  return sonmething.length
+} 
+
+// index.ts(2,22): error TS2339: Property 'length' does not exist on type 'string | number'.
+//   Property 'length' does not exist on type 'number'.
+```
+
+### 对象的类型——接口  
+在 TypeScript 中，我们使用接口（Interfaces）来定义对象的类型。  
+
+#### 什么是接口  
+在面向对象语言中，接口（Interfaces）是一个很重要的概念，它是对行为的抽象，而具体如何行动需要由类（classes）去实现（implement）。  
+
+TypeScript 中的接口是一个非常灵活的概念，除了可用于对类的一部分行为进行抽象以外，也常用于对「对象的形状（Shape）」进行描述。  
+
+#### 简单的例子  
+
+```typescript
+interface Person {
+  name: string;
+  age: number;
+}
+
+let person: Person = {
+  name: "qc",
+  age: 24,
+};
+```  
+
+**接口一般首字母大写**。有的编程语言中会建议接口的名称加上**I**前缀。  
+
+定义的变量比接口少或是多了一些的属性是不被允许的。  
+
+**赋值的时候，变量的形状必须和接口的形状保持一致**  
+
+#### 可选属性  
+有时我们希望不要完全匹配一个形状，那么可以用可选属性：  
+
+```typescript
+interface Person {
+  name: string;
+  age?: number;
+}
+
+let person: Person = {
+  name: "qc",
+};
+```  
+
+这时仍然不允许添加未定义的属性：  
+```typescript
+interface Person {
+  name: string;
+  age?: number;
+}
+
+let tom: Person = {
+  name: 'Tom',
+  age: 25,
+  gender: 'male'
+};
+
+// examples/playground/index.ts(9,5): error TS2322: Type '{ name: string; age: number; gender: string; }' is not assignable to type 'Person'.
+//   Object literal may only specify known properties, and 'gender' does not exist in type 'Person'.
+```  
+
+#### 任意属性  
+有时候我们希望一个接口允许有任意的属性，可以使用如下方式：  
+```typescript
+interface Person {
+  name: string;
+  age?: number;
+  [propName: string]: any;
+}
+
+let tom: Person = {
+  name: 'Tom',
+  gender: 'male'
+};
+```  
+
+使用 ``[propName: string]`` 定义了任意属性取 string 类型的值。  
+
+需要注意的是，**一旦定义了任意属性，那么确定属性和可选属性的类型都必须是它的类型的子集**：  
+
+```typescript
+interface Person {
+  name: string;
+  age?: number;
+  [propName: string]: string;
+}
+
+let tom: Person = {
+  name: 'Tom',
+  age: 25,
+  gender: 'male'
+};
+
+// index.ts(3,5): error TS2411: Property 'age' of type 'number' is not assignable to string index type 'string'.
+// index.ts(7,5): error TS2322: Type '{ [x: string]: string | number; name: string; age: number; gender: string; }' is not assignable to type 'Person'.
+//   Index signatures are incompatible.
+//     Type 'string | number' is not assignable to type 'string'.
+//       Type 'number' is not assignable to type 'string'.
+```
+
+一个接口中只能定义一个任意属性。如果接口中有多个类型的属性，则可以在任意属性中使用联合类型：  
+```typescript
+interface Person {
+  name: string;
+  age?: number;
+  [propName: string]: string | number;
+}
+
+let tom: Person = {
+  name: 'Tom',
+  age: 25,
+  gender: 'male'
+};
+```  
+
+#### 只读属性  
+有时候我们希望对象中的一些字段只能在创建的时候被赋值，那么可以用 readonly 定义只读属性：  
+
+```typescript
+interface Person {
+  readonly id: number;
+  name: string;
+  age?: number;
+  [propName: string]: any;
+}
+
+let tom: Person = {
+  id: 89757,
+  name: 'Tom',
+  gender: 'male'
+};
+
+tom.id = 9527;
+
+// index.ts(14,5): error TS2540: Cannot assign to 'id' because it is a constant or a read-only property.
+```  
+
+**注意，只读的约束存在于第一次给对象赋值的时候，而不是第一次给只读属性赋值的时候**  
+
+```typescript
+interface Person {
+  readonly id: number;
+  name: string;
+  age?: number;
+  [propName: string]: any;
+}
+
+let tom: Person = {
+  name: 'Tom',
+  gender: 'male'
+};
+
+tom.id = 89757;
+
+// index.ts(8,5): error TS2322: Type '{ name: string; gender: string; }' is not assignable to type 'Person'.
+//   Property 'id' is missing in type '{ name: string; gender: string; }'.
+// index.ts(13,5): error TS2540: Cannot assign to 'id' because it is a constant or a read-only property.
+```
+
 
 <CommentService />
