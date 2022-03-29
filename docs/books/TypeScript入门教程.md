@@ -230,7 +230,7 @@ myFavoriteNumber = 'seven';
 myFavoriteNumber = 7;
 ```  
 
-#### 访问联合类型的属性或方法  
+#### <a name="Common">访问联合类型的属性或方法</a>
 
 当 TypeScript 不确定一个联合类型的变量到底是哪个类型的时候，我们只能访问此联合类型的所有类型里**共有的属性或方法**：  
 
@@ -698,6 +698,253 @@ function reverse(x: number | string): number | string | void {
 上例中，我们重复定义了多次函数 reverse，前几次都是函数定义，最后一次是函数实现。在编辑器的代码提示中，可以正确的看到前两个提示。  
 
 注意，TypeScript 会优先从最前面的函数定义开始匹配，所以多个函数定义如果有包含关系，需要优先把精确的定义写在前面。
+
+
+### 类型断言  
+类型断言（Type Assertion）可以用来手动指定一个值的类型。  
+
+#### 语法  
+
+```typescript
+值 as 类型
+```  
+
+或  
+
+```typescript
+<类型>值
+```  
+
+要注意的是如果在``react``中``<>``除了表示是一个``ReactNode``之外还可能表示泛型  
+
+#### 类型断言的用途  
+
+类型断言的常见用途有以下几种：  
+1. 将一个联合类型断言为其中一个类型  
+   <a href="#Common">之前提到过</a>，当 TypeScript 不确定一个联合类型的变量到底是哪个类型的时候，**我们只能访问此联合类型的所有类型中共有的属性或方法**：  
+   ```typescript
+    interface Cat {
+      name: string;
+      run(): void;
+    }
+    interface Fish {
+      name: string;
+      swim(): void;
+    }
+
+    function getName(animal: Cat | Fish) {
+      return animal.name;
+    }
+   ```  
+
+   而有时候，我们确实需要在还不确定类型的时候就访问其中一个类型特有的属性或方法，比如  
+
+   ```typescript
+    interface Cat {
+      name: string;
+      run(): void;
+    }
+    interface Fish {
+      name: string;
+      swim(): void;
+    }
+
+    function isFish(animal: Cat | Fish) {
+      if (typeof animal.swim === 'function') {
+        return true;
+      }
+      return false;
+    }
+
+    // index.ts:11:23 - error TS2339: Property 'swim' does not exist on type 'Cat | Fish'.
+    // Property 'swim' does not exist on type 'Cat'.
+   ```  
+
+   上面的例子中，获取 ``animal.swim`` 的时候会报错。
+
+   此时可以使用类型断言，将 ``animal`` 断言成 ``Fish``  
+
+   ```typescript
+    interface Cat {
+      name: string;
+      run(): void;
+    }
+    interface Fish {
+      name: string;
+      swim(): void;
+    }
+
+    function isFish(animal: Cat | Fish) {
+      if (typeof (animal as Fish).swim === 'function') {
+        return true;
+      }
+      return false;
+    }
+   ```  
+   这样就可以解决访问 ``animal.swim`` 时报错的问题了。  
+
+   需要注意的是，类型断言只能够「欺骗」TypeScript 编译器，无法避免运行时的错误，反而滥用类型断言可能会导致运行时错误：  
+
+   ```typescript
+    interface Cat {
+      name: string;
+      run(): void;
+    }
+    interface Fish {
+      name: string;
+      swim(): void;
+    }
+
+    function swim(animal: Cat | Fish) {
+      (animal as Fish).swim();
+    }
+
+    const tom: Cat = {
+      name: 'Tom',
+      run() { console.log('run') }
+    };
+    swim(tom);
+    // Uncaught TypeError: animal.swim is not a function`
+   ```  
+
+   上面的例子编译时不会报错，但在运行时会报错：  
+
+   ``Uncaught TypeError: animal.swim is not a function``  
+
+   原因是 (animal as Fish).swim() 这段代码隐藏了 animal 可能为 Cat 的情况，将 animal 直接断言为 Fish 了，而 TypeScript 编译器信任了我们的断言，故在调用 swim() 时没有编译错误。  
+   
+   可是 swim 函数接受的参数是 Cat | Fish，一旦传入的参数是 Cat 类型的变量，由于 Cat 上没有 swim 方法，就会导致运行时错误了。  
+
+   总之，使用类型断言时一定要格外小心，尽量避免断言后调用方法或引用深层属性，以减少不必要的运行时错误。  
+
+  2. 将一个父类断言为更加具体的子类  
+     当类之间有继承关系时，类型断言也是很常见的：  
+    
+     ```typescript
+      class APIError extends Error {
+        code: number = 500;
+      }
+      class InterfaceError extends Error {
+        statusCode: number = 200;
+      }
+
+      function isAPIError(error: Error) {
+        if (typeof (error as APIError).code === "number") {
+          return true;
+        }
+        return false;
+      }
+     ``` 
+
+     这里我们看到我们声明了``isAPIError``函数，用来判断传入的是不是``APIError``类型，为了达成目的，这里只能将``error``断言为``APIError``类型, 即它的参数的类型肯定得是比较抽象的父类``Error``，这样的话这个函数就能接受 ``Error`` 或它的子类作为参数了  
+
+     但是由于父类``Error``中没有 ``code`` 属性，故直接获取 ``error.code`` 会报错，需要使用类型断言获取 ``(error as ApiError).code``。  
+
+     大家可能会注意到，在这个例子中有一个更合适的方式来判断是不是 ``ApiError``，那就是使用 ``instanceof``。  
+
+     ```typescript
+      class ApiError extends Error {
+        code: number = 0;
+      }
+      class HttpError extends Error {
+        statusCode: number = 200;
+      }
+
+      function isApiError(error: Error) {
+        if (error instanceof ApiError) {
+          return true;
+        }
+        return false;
+      }
+     ```  
+
+     上面的例子中，确实使用`` instanceof ``更加合适，因为 ``ApiError`` 是一个 ``JavaScript`` 的类，能够通过 ``instanceof`` 来判断 ``error`` 是否是它的实例。    
+     
+     但是有的情况下 ``ApiError`` 和 ``HttpError`` 不是一个真正的类，而只是一个 ``TypeScript`` 的接口（interface），接口是一个类型，不是一个真正的值，它在编译结果中会被删除，当然就无法使用 ``instanceof`` 来做运行时判断了  
+
+     ```typescript
+      interface ApiError extends Error {
+        code: number;
+      }
+      interface HttpError extends Error {
+        statusCode: number;
+      }
+
+      function isApiError(error: Error) {
+        if (error instanceof ApiError) {
+          return true;
+        }
+        return false;
+      }
+
+      // index.ts:9:26 - error TS2693: 'ApiError' only refers to a type, but is being used as a value here.
+     ```  
+
+     此时就只能用类型断言，通过判断是否存在 ``code`` 属性，来判断传入的参数是不是 ``ApiError`` 了：  
+
+     ```typescript
+      interface ApiError extends Error {
+        code: number;
+      }
+      interface HttpError extends Error {
+        statusCode: number;
+      }
+
+      function isApiError(error: Error) {
+        if (typeof (error as ApiError).code === 'number') {
+          return true;
+        }
+        return false;
+      }
+     ```  
+
+  3. 将任何一个类型断言为``any``  
+     
+     理想情况下，TypeScript 的类型系统运转良好，每个值的类型都具体而精确。  
+
+     需要注意的是，将一个变量断言为 any 可以说是解决 TypeScript 中类型问题的最后一个手段。
+
+     **它极有可能掩盖了真正的类型错误，所以如果不是非常确定，就不要使用 as any**。  
+
+     总之，一方面不能滥用 ``as any``，另一方面也不要完全否定它的作用，我们需要在类型的严格性和开发的便利性之间掌握平衡（这也是 TypeScript 的设计理念之一），才能发挥出 TypeScript 最大的价值。  
+    
+  4. 将``any``断言为一个更加具体的子类   
+     
+     在日常的开发中，我们不可避免的需要处理 ``any`` 类型的变量，它们可能是由于第三方库未能定义好自己的类型，也有可能是历史遗留的或其他人编写的烂代码，还可能是受到 ``TypeScript`` 类型系统的限制而无法精确定义类型的场景。   
+
+     遇到 ``any`` 类型的变量时，我们可以选择无视它，任由它滋生更多的 ``any``。
+
+     我们也可以选择改进它，通过类型断言及时的把 ``any`` 断言为精确的类型，亡羊补牢，使我们的代码向着高可维护性的目标发展。
+
+     举例来说，历史遗留的代码中有个 ``getCacheData``，它的返回值是 any：  
+
+     ```typescript
+      function getCacheData(key: string): any {
+        return (window as any).cache[key];
+      }
+     ```  
+     那么我们在使用它时，最好能够将调用了它之后的返回值断言成一个精确的类型，这样就方便了后续的操作：  
+
+     ```typescript
+      function getCacheData(key: string): any {
+        return (window as any).cache[key];
+      }
+
+      interface Cat {
+        name: "mimi";
+        run: () => void;
+      }
+
+      const result = getCacheData("tom") as Cat;
+      result.run();
+     ```  
+
+     上面的例子中，我们调用完 ``getCacheData`` 之后，立即将它断言为 ``Cat`` 类型。这样的话明确了 ``tom`` 的类型，后续对 ``tom`` 的访问时就有了代码补全，提高了代码的可维护性。
+     
+
+
+
+
 
 
 
