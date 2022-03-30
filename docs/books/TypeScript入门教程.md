@@ -720,102 +720,102 @@ function reverse(x: number | string): number | string | void {
 #### 类型断言的用途  
 
 类型断言的常见用途有以下几种：  
-1. 将一个联合类型断言为其中一个类型  
-   <a href="#Common">之前提到过</a>，当 TypeScript 不确定一个联合类型的变量到底是哪个类型的时候，**我们只能访问此联合类型的所有类型中共有的属性或方法**：  
-   ```typescript
-    interface Cat {
-      name: string;
-      run(): void;
-    }
-    interface Fish {
-      name: string;
-      swim(): void;
-    }
+  1. 将一个联合类型断言为其中一个类型  
+     <a href="#Common">之前提到过</a>，当 TypeScript 不确定一个联合类型的变量到底是哪个类型的时候，**我们只能访问此联合类型的所有类型中共有的属性或方法**：  
+      ```typescript
+        interface Cat {
+          name: string;
+          run(): void;
+        }
+        interface Fish {
+          name: string;
+          swim(): void;
+        }
 
-    function getName(animal: Cat | Fish) {
-      return animal.name;
-    }
-   ```  
+        function getName(animal: Cat | Fish) {
+          return animal.name;
+        }
+      ```  
 
-   而有时候，我们确实需要在还不确定类型的时候就访问其中一个类型特有的属性或方法，比如  
+      而有时候，我们确实需要在还不确定类型的时候就访问其中一个类型特有的属性或方法，比如  
 
-   ```typescript
-    interface Cat {
-      name: string;
-      run(): void;
-    }
-    interface Fish {
-      name: string;
-      swim(): void;
-    }
+      ```typescript
+        interface Cat {
+          name: string;
+          run(): void;
+        }
+        interface Fish {
+          name: string;
+          swim(): void;
+        }
 
-    function isFish(animal: Cat | Fish) {
-      if (typeof animal.swim === 'function') {
-        return true;
-      }
-      return false;
-    }
+        function isFish(animal: Cat | Fish) {
+          if (typeof animal.swim === 'function') {
+            return true;
+          }
+          return false;
+        }
 
-    // index.ts:11:23 - error TS2339: Property 'swim' does not exist on type 'Cat | Fish'.
-    // Property 'swim' does not exist on type 'Cat'.
-   ```  
+        // index.ts:11:23 - error TS2339: Property 'swim' does not exist on type 'Cat | Fish'.
+        // Property 'swim' does not exist on type 'Cat'.
+      ```  
 
-   上面的例子中，获取 ``animal.swim`` 的时候会报错。
+      上面的例子中，获取 ``animal.swim`` 的时候会报错。
 
-   此时可以使用类型断言，将 ``animal`` 断言成 ``Fish``  
+      此时可以使用类型断言，将 ``animal`` 断言成 ``Fish``  
 
-   ```typescript
-    interface Cat {
-      name: string;
-      run(): void;
-    }
-    interface Fish {
-      name: string;
-      swim(): void;
-    }
+      ```typescript
+        interface Cat {
+          name: string;
+          run(): void;
+        }
+        interface Fish {
+          name: string;
+          swim(): void;
+        }
 
-    function isFish(animal: Cat | Fish) {
-      if (typeof (animal as Fish).swim === 'function') {
-        return true;
-      }
-      return false;
-    }
-   ```  
-   这样就可以解决访问 ``animal.swim`` 时报错的问题了。  
+        function isFish(animal: Cat | Fish) {
+          if (typeof (animal as Fish).swim === 'function') {
+            return true;
+          }
+          return false;
+        }
+      ```  
+      这样就可以解决访问 ``animal.swim`` 时报错的问题了。  
 
-   需要注意的是，类型断言只能够「欺骗」TypeScript 编译器，无法避免运行时的错误，反而滥用类型断言可能会导致运行时错误：  
+      需要注意的是，类型断言只能够「欺骗」TypeScript 编译器，无法避免运行时的错误，反而滥用类型断言可能会导致运行时错误：  
 
-   ```typescript
-    interface Cat {
-      name: string;
-      run(): void;
-    }
-    interface Fish {
-      name: string;
-      swim(): void;
-    }
+      ```typescript
+        interface Cat {
+          name: string;
+          run(): void;
+        }
+        interface Fish {
+          name: string;
+          swim(): void;
+        }
 
-    function swim(animal: Cat | Fish) {
-      (animal as Fish).swim();
-    }
+        function swim(animal: Cat | Fish) {
+          (animal as Fish).swim();
+        }
 
-    const tom: Cat = {
-      name: 'Tom',
-      run() { console.log('run') }
-    };
-    swim(tom);
-    // Uncaught TypeError: animal.swim is not a function`
-   ```  
+        const tom: Cat = {
+          name: 'Tom',
+          run() { console.log('run') }
+        };
+        swim(tom);
+        // Uncaught TypeError: animal.swim is not a function`
+      ```  
 
-   上面的例子编译时不会报错，但在运行时会报错：  
+      上面的例子编译时不会报错，但在运行时会报错：  
 
-   ``Uncaught TypeError: animal.swim is not a function``  
+      ``Uncaught TypeError: animal.swim is not a function``  
 
-   原因是 (animal as Fish).swim() 这段代码隐藏了 animal 可能为 Cat 的情况，将 animal 直接断言为 Fish 了，而 TypeScript 编译器信任了我们的断言，故在调用 swim() 时没有编译错误。  
-   
-   可是 swim 函数接受的参数是 Cat | Fish，一旦传入的参数是 Cat 类型的变量，由于 Cat 上没有 swim 方法，就会导致运行时错误了。  
+      原因是 (animal as Fish).swim() 这段代码隐藏了 animal 可能为 Cat 的情况，将 animal 直接断言为 Fish 了，而 TypeScript 编译器信任了我们的断言，故在调用 swim() 时没有编译错误。  
+      
+      可是 swim 函数接受的参数是 Cat | Fish，一旦传入的参数是 Cat 类型的变量，由于 Cat 上没有 swim 方法，就会导致运行时错误了。  
 
-   总之，使用类型断言时一定要格外小心，尽量避免断言后调用方法或引用深层属性，以减少不必要的运行时错误。  
+      总之，使用类型断言时一定要格外小心，尽量避免断言后调用方法或引用深层属性，以减少不必要的运行时错误。  
 
   2. 将一个父类断言为更加具体的子类  
      当类之间有继承关系时，类型断言也是很常见的：  
@@ -939,17 +939,319 @@ function reverse(x: number | string): number | string | void {
       result.run();
      ```  
 
-     上面的例子中，我们调用完 ``getCacheData`` 之后，立即将它断言为 ``Cat`` 类型。这样的话明确了 ``tom`` 的类型，后续对 ``tom`` 的访问时就有了代码补全，提高了代码的可维护性。
+     上面的例子中，我们调用完 ``getCacheData`` 之后，立即将它断言为 ``Cat`` 类型。这样的话明确了 ``tom`` 的类型，后续对 ``tom`` 的访问时就有了代码补全，提高了代码的可维护性。  
+
      
 
-
-
-
-
-
-
-
  
+
+#### 类型断言的限制  
+
+从上面的例子中，我们可以总结出  
+- 联合类型可以断言为其中一个类型  
+- 父类可以断言为子类  
+- 任何类型都可以被断言为any  
+- any可以被断言为任何类型  
+
+那么类型断言到底有没有限制呢？是不是任何类型都可以被断言为另一个类型呢？  
+
+答案是否定的——并不是任何类型都可以被断言为任何另一个类型  
+
+具体来说，若``A``兼容``B``,那么``A``能够被断言为``B``，``B``也能被断言为``A``   
+
+下面我们通过一个简化的例子，来理解类型断言的限制：  
+
+```typescript
+interface Animal {
+  name: string;
+}
+
+interface Cat {
+  name: string;
+  run(): void;
+}
+
+let tom: Cat = {
+  name: "miao",
+  run() {
+    console.log("miao miao");
+  },
+};
+let animal: Animal = tom;
+```   
+
+上面例子中我们把``Car``类型的``tom``赋值给``Animal``类型的``animal``,但其实``animal``仍然是只有``Animal``类型中的属性，并没有``run``方法。  
+
+我们知道，``TypeScript`` 是结构类型系统，类型之间的对比只会比较它们最终的结构，而会忽略它们定义时的关系。
+
+在上面的例子中，``Cat`` 包含了 ``Animal`` 中的所有属性，除此之外，它还有一个额外的方法 ``run``。``TypeScript`` 并不关心 ``Cat`` 和 ``Animal`` 之间定义时是什么关系，而只会看它们最终的结构有什么关系——所以它与 ``Cat extends Animal`` 是等价的：   
+
+```typescript
+interface Animal {
+  name: string;
+}
+
+interface Cat extends Animal {
+  run(): void;
+}
+```  
+
+那么也不难理解为什么 ``Cat`` 类型的 ``tom`` 可以赋值给 ``Animal`` 类型的 ``animal`` 了——就像面向对象编程中我们可以将子类的实例赋值给类型为父类的变量。
+
+我们把它换成 ``TypeScript`` 中更专业的说法，即：``Animal`` **兼容** ``Cat``  
+
+当 ``Animal`` 兼容 ``Cat`` 时，它们就可以互相进行类型断言了：  
+
+```typescript
+interface Cat {
+  name: string;
+  run(): void;
+}
+
+let tom: Cat = {
+  name: "miao",
+  run() {
+    console.log("miao miao");
+  },
+};
+let animal: Animal = tom;
+
+function testAnimal(animal: Animal) {
+  return animal as Cat;
+}
+
+function testCat(cat: Cat) {
+  return cat as Animal;
+}
+```  
+
+即  
+
+- 允许 ``animal as Cat`` 是因为「父类可以被断言为子类」，这个前面已经学习过了
+- 允许 ``cat as Animal`` 是因为既然子类拥有父类的属性和方法，那么被断言为父类，获取父类的属性、调用父类的方法，就不会有任何问题，故「子类可以被断言为父类」  
+
+需要注意的是，这里我们使用了简化的父类子类的关系来表达类型的兼容性，而实际上 TypeScript 在判断类型的兼容性时，比这种情况复杂很多。  
+
+总之，若 A 兼容 B，那么 A 能够被断言为 B，B 也能被断言为 A。  
+
+同理，若 B 兼容 A，那么 A 能够被断言为 B，B 也能被断言为 A。  
+
+所以这也可以换一种说法：  
+
+要使得 A 能够被断言为 B，只需要 A 兼容 B 或 B 兼容 A 即可，这也是为了在类型断言时的安全考虑，毕竟毫无根据的断言是非常危险的。  
+
+综上所述：  
+
+- 联合类型可以被断言为其中一个类型   
+- 父类可以被断言为子类  
+- 任何类型都可以被断言为 ``any`` 
+- ``any``可以被断言为任何类型  
+- 要使得 ``A`` 能够被断言为 ``B``，只需要 ``A`` 兼容 ``B`` 或 ``B`` 兼容 ``A``即可  
+
+其实前四种情况都是最后一个的特例。  
+
+#### 双重断言  
+既然：  
+
+- 任何类型都可以被断言为 any  
+- any 可以被断言为任何类型   
+
+那么我们是不是可以使用双重断言 as any as Foo 来将任何一个类型断言为任何另一个类型呢？   
+
+```typescript
+interface Cat {
+  run(): void;
+}
+interface Fish {
+  swim(): void;
+}
+
+function testCat(cat: Cat) {
+  return (cat as any as Fish);
+}
+```  
+
+在上面的例子中，若直接使用 cat as Fish 肯定会报错，因为 Cat 和 Fish 互相都不兼容。
+
+但是若使用双重断言，则可以打破「要使得 A 能够被断言为 B，只需要 A 兼容 B 或 B 兼容 A 即可」的限制，将任何一个类型断言为任何另一个类型。
+
+若你使用了这种双重断言，那么十有八九是非常错误的，它很可能会导致运行时错误。  
+
+**除非迫不得已，千万别用双重断言。**  
+
+#### 类型断言 vs 类型转换  
+
+类型断言只会影响 ``TypeScript`` 编译时的类型，类型断言语句在编译结果中会被删除：  
+
+```typescript
+function toBoolean(something: any): boolean {
+  return something as boolean;
+}
+
+toBoolean(1);
+// 返回值为 1  
+```  
+
+在上面的例子中，将 something 断言为 boolean 虽然可以通过编译，但是并没有什么用，代码在编译后会变成：  
+
+```typescript
+function toBoolean(something) {
+  return something;
+}
+
+toBoolean(1);
+// 返回值为 1
+```  
+
+所以类型断言不是类型转换，它不会真的影响到变量的类型。  
+
+若要进行类型转换，需要直接调用类型转换的方法：  
+
+```typescript
+function toBoolean(something: any): boolean {
+  return Boolean(something);
+}
+
+toBoolean(1);
+// 返回值为 true
+```  
+
+#### 类型断言 vs 类型声明  
+
+在这个例子中：  
+
+```typescript  
+function getCacheData(key: string): any {
+  return (window as any).cache[key];
+}
+
+interface Cat {
+  name: string;
+  run(): void;
+}
+
+let data = getCacheData("Hello") as Cat;
+
+data.run();
+```  
+
+我们使用 ``as Cat`` 将 ``any`` 类型断言为了 ``Cat`` 类型。  
+
+但实际上还有其他方式可以解决这个问题：  
+
+```typescript
+function getCacheData(key: string): any {
+  return (window as any).cache[key];
+}
+
+interface Cat {
+  name: string;
+  run(): void;
+}
+
+let data: Cat = getCacheData("Hello");
+data.run();
+```  
+上面的例子中，我们通过类型声明的方式，将 tom 声明为 Cat，然后再将 any 类型的 getCacheData('tom') 赋值给 Cat 类型的 tom。  
+
+这和类型断言是非常相似的，而且产生的结果也几乎是一样的——tom 在接下来的代码中都变成了 Cat 类型。  
+
+它们的区别，可以通过这个例子来理解：  
+
+```typescript  
+interface Animal {
+  name: string;
+}
+interface Cat {
+  name: string;
+  run(): void;
+}
+
+const animal: Animal = {
+  name: "tom",
+};
+let tom = animal as Cat;  
+```  
+
+在上面的例子中，由于 Animal 兼容 Cat，故可以将 animal 断言为 Cat 赋值给 tom。
+
+但是若直接声明 tom 为 Cat 类型  
+
+```typescript
+interface Animal {
+  name: string;
+}
+interface Cat {
+  name: string;
+  run(): void;
+}
+
+const animal: Animal = {
+  name: 'tom'
+};
+let tom: Cat = animal;
+
+// index.ts:12:5 - error TS2741: Property 'run' is missing in type 'Animal' but required in type 'Cat'.
+```  
+
+则会报错，不允许将 animal 赋值为 Cat 类型的 tom。
+
+这很容易理解，Animal 可以看作是 Cat 的父类，当然不能将父类的实例赋值给类型为子类的变量。
+
+深入的讲，它们的核心区别就在于  
+
+- animal 断言为 Cat，只需要满足 Animal 兼容 Cat 或 Cat 兼容 Animal 即可
+- animal 赋值给 tom，需要满足 Cat 兼容 Animal 才行  
+
+但是 Cat 并不兼容 Animal。
+
+而在前一个例子中，由于 getCacheData('tom') 是 any 类型，any 兼容 Cat，Cat 也兼容 any，故  
+
+`` const tom = getCacheData('tom') as Cat; ``  
+
+等价于  
+
+`` const tom: Cat = getCacheData('tom'); ``  
+
+知道了它们的核心区别，就知道了类型声明是比类型断言更加严格的。  
+
+所以为了增加代码的质量，我们最好优先使用类型声明，这也比类型断言的 as 语法更加优雅。  
+
+#### 类型断言 vs 泛型
+
+还是这个例子：  
+
+```typescript
+function getCacheData(key: string): any {
+  return (window as any).cache[key];
+}
+
+interface Cat {
+  name: string;
+  run(): void;
+}
+
+const tom = getCacheData('tom') as Cat;
+tom.run();
+```  
+
+我们还有第三种方式可以解决这个问题，那就是泛型：  
+
+```typescript
+function getCacheData<T>(key: string): T {
+  return (window as any).cache[key];
+}
+
+interface Cat {
+  name: string;
+  run(): void;
+}
+
+const tom = getCacheData<Cat>('tom');
+tom.run();
+```  
+
+通过给 getCacheData 函数添加了一个泛型 ``<T>``，我们可以更加规范的实现对 getCacheData 返回值的约束，这也同时去除掉了代码中的 any，是最优的一个解决方案。  
 
 ### <a name="T">泛型</a>  
 
