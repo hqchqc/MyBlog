@@ -1323,7 +1323,260 @@ interface Math {
 
 Node.js 不是内置对象的一部分，如果想用 TypeScript 写 Node.js，则需要引入第三方声明文件：   
 
-`` npm install @types/node --save-dev ``
+`` npm install @types/node --save-dev ``  
+
+### 声明文件  
+当使用第三方库时，我们需要引用它的声明文件，才能获得对应的代码补全、接口提示等功能。  
+
+#### 什么是声明语句  
+
+假如我们想使用第三方库 jQuery，一种常见的方式是在 html 中通过 ``<script>`` 标签引入 jQuery，然后就可以使用全局变量 $ 或 jQuery 了。  
+
+我们通常这样获取一个 id 是 foo 的元素：   
+
+```typescript
+$('#foo');
+// or
+jQuery('#foo');
+```  
+
+但是在 ts 中，编译器并不知道 $ 或 jQuery 是什么东西：  
+
+```typescript
+jQuery('#foo');
+// ERROR: Cannot find name 'jQuery'.
+```  
+
+这时，我们需要使用 ``declare var`` 来定义它的类型：  
+
+```typescript
+declare var jQuery: (selector: string) => any;
+
+jQuery('#foo');
+```  
+
+上例中，**declare var 并没有真的定义一个变量，只是定义了全局变量 jQuery 的类型，仅仅会用于编译时的检查**，在编译结果中会被删除。它编译结果是：  
+
+```typescript
+jQuery('#foo');
+```  
+
+#### 什么是声明文件  
+
+通常我们会把声明语句放到一个单独的文件（jQuery.d.ts）中，这就是声明文件：  
+
+声明文件必需以 .d.ts 为后缀。  
+
+一般来说，ts 会解析项目中所有的 *.ts 文件，当然也包含以 .d.ts 结尾的文件。所以当我们将 jQuery.d.ts 放到项目中时，其他所有 *.ts 文件就都可以获得 jQuery 的类型定义了。  
+
+假如仍然无法解析，那么可以检查下 tsconfig.json 中的 files、include 和 exclude 配置，确保其包含了 jQuery.d.ts 文件。  
+
+##### 第三方声明文件  
+
+当然，jQuery 的声明文件不需要我们定义了，社区已经帮我们定义好了：jQuery in DefinitelyTyped。  
+
+我们可以直接下载下来使用，但是更推荐的是使用 @types 统一管理第三方库的声明文件。  
+
+@types 的使用方式很简单，直接用 npm 安装对应的声明模块即可，以 jQuery 举例：   
+
+``npm install @types/jquery --save-dev``  
+
+#### 书写声明文件  
+
+当一个第三方库没有提供声明文件时，我们就需要自己书写声明文件了。前面只介绍了最简单的声明文件内容，而真正书写一个声明文件并不是一件简单的事，以下会详细介绍如何书写声明文件。  
+
+在不同的场景下，声明文件的内容和使用方式会有所区别。  
+
+库的使用场景主要有以下几种：  
+
+- 全局变量：通过 <script> 标签引入第三方库，注入全局变量
+- npm 包：通过 import foo from 'foo' 导入，符合 ES6 模块规范
+- UMD 库：既可以通过 <script> 标签引入，又可以通过 import 导入
+- 直接扩展全局变量：通过 <script> 标签引入后，改变一个全局变量的结构
+- 在 npm 包或 UMD 库中扩展全局变量：引用 npm 包或 UMD 库后，改变一个全局变量的结构
+- 模块插件：通过 <script> 或 import 导入后，改变另一个模块的结构  
+
+##### 全局变量  
+
+全局变量是最简单的一种场景，之前举的例子就是通过 <script> 标签引入 jQuery，注入全局变量 $ 和 jQuery。   
+
+使用全局变量的声明文件时，如果是以 ``npm install @types/xxx --save-dev`` 安装的，则不需要任何配置。如果是将声明文件直接存放于当前项目中，则建议和其他源码一起放到 src 目录下（或者对应的源码目录下）：   
+
+```
+/path/to/project
+├── src
+|  ├── index.ts
+|  └── jQuery.d.ts
+└── tsconfig.json
+```  
+
+全局变量的声明文件主要有以下几种语法：  
+
+- ``declare var`` 声明全局变量
+- ``declare function`` 声明全局方法
+- ``declare class`` 声明全局类
+- ``declare enum`` 声明全局枚举类型
+- ``declare namespace`` 声明（含有子属性的）全局对象
+- ``interface`` 和 ``type`` 声明全局类型  
+
+``declare var``  
+在所有的声明语句中，declare var 是最简单的，如之前所学，它能够用来定义一个全局变量的类型。与其类似的，还有 declare let 和 declare const，使用 let 与使用 var 没有什么区别：  
+
+```typescript
+// src/jQuery.d.ts
+
+declare let jQuery: (selector: string) => any;
+```  
+
+``declare function``  
+
+declare function 用来定义全局函数的类型。jQuery 其实就是一个函数，所以也可以用 function 来定义  
+
+```typescript
+// src/jQuery.d.ts
+
+declare function jQuery(selector: string): any;
+```  
+
+``declare class``  
+
+当全局变量是一个类的时候，我们用 declare class 来定义它的类型  
+
+```typescript
+// src/Animal.d.ts
+
+declare class Animal {
+  name: string;
+  constructor(name: string);
+  sayHi(): string;
+}
+```  
+
+``declare enum``  
+使用 declare enum 定义的枚举类型也称作外部枚举（Ambient Enums），举例如下  
+
+```typescript
+// src/Directions.d.ts
+
+declare enum Directions {
+  Up,
+  Down,
+  Left,
+  Right
+}
+```  
+
+与其他全局变量的类型声明一致，declare enum 仅用来定义类型，而不是具体的值。  
+
+Directions.d.ts 仅仅会用于编译时的检查，声明文件里的内容在编译结果中会被删除。它编译结果是：  
+
+``var directions = [Directions.Up, Directions.Down, Directions.Left, Directions.Right];``  
+
+``declare namespace``  
+
+namespace 是 ts 早期时为了解决模块化而创造的关键字，中文称为命名空间    
+
+由于历史遗留原因，在早期还没有 ES6 的时候，ts 提供了一种模块化方案，使用 module 关键字表示内部模块。但由于后来 ES6 也使用了 module 关键字，ts 为了兼容 ES6，使用 namespace 替代了自己的 module，更名为命名空间。  
+
+随着 ES6 的广泛应用，现在已经不建议再使用 ts 中的 namespace，而推荐使用 ES6 的模块化方案了，故我们不再需要学习 namespace 的使用了。  
+
+namespace 被淘汰了，但是在声明文件中，declare namespace 还是比较常用的，它用来表示全局变量是一个对象，包含很多子属性。  
+
+比如 jQuery 是一个全局变量，它是一个对象，提供了一个 jQuery.ajax 方法可以调用，那么我们就应该使用 declare namespace jQuery 来声明这个拥有多个子属性的全局变量。  
+
+```typescript
+// src/jQuery.d.ts
+
+declare namespace jQuery {
+  function ajax(url: string, settings?: any): void;
+}
+```  
+
+###### 嵌套的命名空间  
+
+如果对象拥有深层的层级，则需要用嵌套的 namespace 来声明深层的属性的类型   
+
+```typescript
+// src/jQuery.d.ts
+
+declare namespace jQuery {
+  function ajax(url: string, settings?: any): void;
+  namespace fn {
+    function extend(object: any): void;
+  }
+}
+```  
+
+假如 jQuery 下仅有 fn 这一个属性（没有 ajax 等其他属性或方法），则可以不需要嵌套 namespace:   
+
+```typescript
+// src/jQuery.d.ts
+
+declare namespace jQuery.fn {
+  function extend(object: any): void;
+}
+```  
+
+``interface`` 和 ``type``  
+
+除了全局变量之外，可能有一些类型我们也希望能暴露出来。在类型声明文件中，我们可以直接使用 interface 或 type 来声明一个全局的接口或类型  
+
+```typescript
+// src/jQuery.d.ts
+
+interface AjaxSettings {
+  method?: 'GET' | 'POST'
+  data?: any;
+}
+declare namespace jQuery {
+  function ajax(url: string, settings?: AjaxSettings): void;
+}
+```  
+
+``type`` 与 ``interface`` 类似  
+
+###### 防止命名冲突  
+
+暴露在最外层的 interface 或 type 会作为全局类型作用于整个项目中，我们应该尽可能的减少全局变量或全局类型的数量。故最好将他们放到 namespace 下  
+
+```typescript
+// src/jQuery.d.ts
+
+declare namespace jQuery {
+  interface AjaxSettings {
+    method?: 'GET' | 'POST'
+    data?: any;
+  }
+  function ajax(url: string, settings?: AjaxSettings): void;
+}
+```  
+
+注意，在使用这个 interface 的时候，也应该加上 jQuery 前缀：  
+
+```typescript
+// src/index.ts
+
+let settings: jQuery.AjaxSettings = {
+  method: 'POST',
+  data: {
+    name: 'foo'
+  }
+};
+jQuery.ajax('/api/post_something', settings);
+```  
+
+###### 声明合并  
+
+如 jQuery 既是一个函数，可以直接被调用 jQuery('#foo')，又是一个对象，拥有子属性 jQuery.ajax()（事实确实如此），那么我们可以组合多个声明语句，它们不会冲突的合并起来  
+
+##### npm包
+
+
+
+
+
+
+
 
 ### <a name="T">泛型</a>  
 
