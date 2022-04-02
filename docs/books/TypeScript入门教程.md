@@ -1569,7 +1569,123 @@ jQuery.ajax('/api/post_something', settings);
 
 如 jQuery 既是一个函数，可以直接被调用 jQuery('#foo')，又是一个对象，拥有子属性 jQuery.ajax()（事实确实如此），那么我们可以组合多个声明语句，它们不会冲突的合并起来  
 
-##### npm包
+##### npm包  
+
+一般我们通过 import foo from 'foo' 导入一个 npm 包，这是符合 ES6 模块规范的。  
+
+在我们尝试给一个 npm 包创建声明文件之前，需要先看看它的声明文件是否已经存在。一般来说，npm 包的声明文件可能存在于两个地方：   
+
+1. 与该 npm 包绑定在一起。判断依据是 package.json 中有 types 字段，或者有一个 index.d.ts 声明文件。这种模式不需要额外安装其他包，是最为推荐的，所以以后我们自己创建 npm 包的时候，最好也将声明文件与 npm 包绑定在一起。  
+
+2. 发布到 @types 里。我们只需要尝试安装一下对应的 @types 包就知道是否存在该声明文件，安装命令是 ``npm install @types/foo --save-dev``。这种模式一般是由于 npm 包的维护者没有提供声明文件，所以只能由其他人将声明文件发布到 @types 里了。  
+
+假如以上两种方式都没有找到对应的声明文件，那么我们就需要自己为它写声明文件了。由于是通过 import 语句导入的模块，所以声明文件存放的位置也有所约束，一般有两种方案：  
+
+1. 创建一个 node_modules/@types/foo/index.d.ts 文件，存放 foo 模块的声明文件。这种方式不需要额外的配置，但是 node_modules 目录不稳定，代码也没有被保存到仓库中，无法回溯版本，有不小心被删除的风险，故不太建议用这种方案，一般只用作临时测试。  
+
+2. 创建一个 types 目录，专门用来管理自己写的声明文件，将 foo 的声明文件放到 types/foo/index.d.ts 中。这种方式需要配置下 tsconfig.json 中的 paths 和 baseUrl 字段。  
+
+目录结构：  
+```
+/path/to/project
+├── src
+|  └── index.ts
+├── types
+|  └── foo
+|     └── index.d.ts
+└── tsconfig.json
+```  
+
+tsconfig.json 内容：  
+
+```
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "baseUrl": "./",
+    "paths": {
+      "*": ["types/*"]
+    }
+  }
+}
+```  
+
+如此配置之后，通过 import 导入 foo 的时候，也会去 types 目录下寻找对应的模块的声明文件了。  
+
+注意 module 配置可以有很多种选项，不同的选项会影响模块的导入导出模式。这里我们使用了 commonjs 这个最常用的选项，后面的教程也都默认使用的这个选项。    
+
+npm 包的声明文件主要有以下几种语法：  
+
+- ``export``导出变量  
+- ``export namespace``导出（含有子属性的）对象
+- ``export default``ES6 默认导出  
+- ``export=``commonjs 导出模块   
+
+##### UMD库  
+
+既可以通过 ``<script>`` 标签引入，又可以通过 ``import`` 导入的库，称为 ``UMD`` 库。相比于 ``npm`` 包的类型声明文件，我们需要额外声明一个全局变量，为了实现这种方式，ts 提供了一个新语法 ``export as namespace``  
+
+``export as namespace``  
+
+一般使用 ``export as namespace`` 时，都是先有了 ``npm`` 包的声明文件，再基于它添加一条 ``export as namespace`` 语句，即可将声明好的一个变量声明为全局变量，举例如下  
+
+```typescript
+// types/foo/index.d.ts
+
+export as namespace foo;
+export = foo;
+
+declare function foo(): string;
+declare namespace foo {
+  const bar: number;
+}
+```  
+
+当然它也可以与 export default 一起使用：  
+
+```typescript
+// types/foo/index.d.ts
+
+export as namespace foo;
+export default foo;
+
+declare function foo(): string;
+declare namespace foo {
+  const bar: number;
+}
+```  
+
+##### 声明文件中的依赖  
+
+一个声明文件有时会依赖另一个声明文件中的类型，比如在前面的 ``declare module`` 的例子中，我们就在声明文件中导入了 ``moment``，并且使用了 ``moment.CalendarKey`` 这个类型  
+
+```typescript
+// types/moment-plugin/index.d.ts
+
+import * as moment from 'moment';
+
+declare module 'moment' {
+  export function foo(): moment.CalendarKey;
+}
+```  
+
+除了可以在声明文件中通过 import 导入另一个声明文件中的类型之外，还有一个语法也可以用来导入另一个声明文件，那就是**三斜线指令**。  
+
+###### 三斜线指令  
+
+与 namespace 类似，三斜线指令也是 ts 在早期版本中为了描述模块之间的依赖关系而创造的语法。随着 ES6 的广泛应用，现在已经不建议再使用 ts 中的三斜线指令来声明模块之间的依赖关系了。  
+
+但是在声明文件中，它还是有一定的用武之地。   
+
+类似于声明文件中的 import，它可以用来导入另一个声明文件。与 import 的区别是，当且仅当在以下几个场景下，我们才需要使用三斜线指令替代 import：  
+
+1. 当我们在书写一个全局变量的声明文件时
+2. 当我们需要依赖一个全局变量的声明文件时
+
+
+
+
+
 
 
 
