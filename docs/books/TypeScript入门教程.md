@@ -1717,9 +1717,24 @@ function getName(n: NameOrResolver): Name {
 
 上例中，我们使用 ``type`` 创建类型别名。  
 
-类型别名常用于联合类型。  
+类型别名常用于联合类型。   
 
+### 字符串字面量类型  
+字符串字面量类型用来约束取值只能是某几个字符串中的一个  
 
+#### 简单的例子  
+```typescript
+type EventNames = 'click' | 'scroll' | 'mousemove';
+function handleEvenet(ele: Element,event:EventNames) {
+  // do something
+}  
+handle(document,getElementById('hello'), 'scroll');  // 没问题
+handle(document.getElementById('world'), 'dbclick');  // 报错 event不能为 ‘dbClick'
+```  
+
+上例中，我们使用``type``定义了一个字符串字面量类型``EventNames``,它只能取三种字符串中的一种。  
+
+注意，**类型别名与字符串字面量类型都是使用 ``type`` 进行定义**。
 ### <a name="T">泛型</a>  
 
 <CommentService />
