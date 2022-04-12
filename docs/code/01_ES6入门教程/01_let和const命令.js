@@ -36,3 +36,5 @@ if (true) {
   foo = 333;
   console.log(foo);
 }
+
+// 变量提升 暂时性死区
