@@ -2168,7 +2168,9 @@ class Animal {
 
 let a: Animal = new Animal('Jack');
 console.log(a.sayHi()); // My name is Jack
-```
+```  
+
+### 类与接口
 
 
 ### <a name="T">泛型</a>  
