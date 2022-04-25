@@ -51,3 +51,26 @@
   let { log } = console;
   log(123, "hahaha");
 }
+
+{
+  let obj = {};
+  let arr = [];
+  ({ foo: obj.hahaha, bar: arr[0] } = { foo: 123, bar: true });
+  console.log(obj, arr);
+}
+
+{
+  var { s, y = 3 } = {};
+  console.log(y, s);
+}
+
+{
+  const a = new Map();
+  a.set("a", 1);
+  a.set("b", 2);
+  a.set("c", 3);
+
+  for (let [, value] of a) {
+    console.log(value);
+  }
+}
