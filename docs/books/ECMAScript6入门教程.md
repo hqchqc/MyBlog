@@ -57,3 +57,10 @@
 - <span style="color: #FFA1A1">字符串也可以解构赋值。这是因为此时，字符串被转换成了一个类似数组的对象。</span>
 
 - <span style="color: #FFA1A1">遍历 Map 结构 for of 循环 [ ,value]</span>
+
+## 字符串的扩展
+
+> 这节主要是关于模板字符串的 平时比较少遇到
+
+- 字符串添加了 Iterator 接口 使得可以使用 for of 循环
+  - 有一些特殊字符使用传统的 for 循环会输出两个未知字符 使用 for of 可以正确输出一个字符
