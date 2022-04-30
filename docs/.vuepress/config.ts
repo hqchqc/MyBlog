@@ -88,7 +88,10 @@ export default defineUserConfig<DefaultThemeOptions>({
       },
       {
         text: "JavaScript",
-        children: ["/javaScript/排序算法.md"],
+        children: [
+          "/javaScript/排序算法.md",
+          "/javascript/深入JavaScript高级语法.md",
+        ],
       },
 
       //格式三：跳转至外部网页，需http/https前缀
