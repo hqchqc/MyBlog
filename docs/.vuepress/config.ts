@@ -90,12 +90,27 @@ export default defineUserConfig<DefaultThemeOptions>({
         text: "JavaScript",
         children: [
           "/javaScript/排序算法.md",
-          "/javascript/深入JavaScript高级语法.md",
+          {
+            link: "/javaScript/深入JavaScript高级语法",
+            text: "深入JavaScript高级语法",
+          },
         ],
       },
 
       //格式三：跳转至外部网页，需http/https前缀
       { text: "Github", link: "https://github.com/hqchqc" },
     ],
+    // 侧边栏
+    // 不同子路径下的页面会使用不同的侧边栏
+    sidebar: {
+      "/javaScript/": [
+        {
+          text: "深入JavaScript高级语法",
+          children: [
+            "/javaScript/深入JavaScript高级语法/01_浏览器工作原理和 V8 引擎.md",
+          ],
+        },
+      ],
+    },
   },
 });
