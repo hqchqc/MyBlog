@@ -108,6 +108,7 @@ export default defineUserConfig<DefaultThemeOptions>({
           text: "深入JavaScript高级语法",
           children: [
             "/javaScript/深入JavaScript高级语法/01_浏览器工作原理和 V8 引擎.md",
+            "/javaScript/深入JavaScript高级语法/02_函数执行过程和作用域链.md",
           ],
         },
       ],
