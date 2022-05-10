@@ -111,6 +111,7 @@ export default defineUserConfig<DefaultThemeOptions>({
             "/javaScript/深入JavaScript高级语法/02_函数执行过程和作用域链.md",
             "/javaScript/深入JavaScript高级语法/03_闭包的定义和内存模型.md",
             "/javaScript/深入JavaScript高级语法/04_内存回收和this绑定规则.md",
+            "/javaScript/深入JavaScript高级语法/05_this绑定规则细节及巩固.md",
           ],
         },
       ],
