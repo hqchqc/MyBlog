@@ -212,20 +212,25 @@
 // person1.obj.foo2.call(person2)(); // person2
 // person1.obj.foo2().call(person2); // person1 -> obj
 
-var name = "window";
-var obj1 = {
-  name: "oo",
-  foo: () => {
-    console.log(this.name, this); // undefined window
-  },
-};
+{
+  var name = "windows";
+  var obj1 = {
+    name: "oo",
+    foo: () => {
+      console.log(this.name, this);
+    },
+  };
+}
 
-let obj2 = {
-  name: "pp",
-  foo: () => {
-    console.log(this.name, this); // pp obj2
-  },
-};
+{
+  let name = "name2";
+  const obj2 = {
+    name: "pp",
+    foo: () => {
+      console.log(this.name, this);
+    },
+  };
+  obj2.foo();
+}
 
 obj1.foo();
-obj2.foo();
