@@ -172,7 +172,7 @@ function transformArray(num1, num2) {
   var newArr3 = [...arguments];
   console.log(newArr3);
 
-  // 4. Array.f
+  // 4. Array.from
   var newArr4 = Array.from(arguments);
   console.log(newArr4);
 
