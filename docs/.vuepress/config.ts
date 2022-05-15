@@ -84,14 +84,22 @@ export default defineUserConfig<DefaultThemeOptions>({
       },
       {
         text: "框架学习",
-        children: ["/frame/React.md", "/frame/Vue2.md", "/frame/Vue3.md"],
+        children: [
+          {
+            link: "/frame/Vue2/Vue2",
+            text: "Vue2",
+          },
+        ],
       },
       {
         text: "JavaScript",
         children: [
-          "/javaScript/排序算法.md",
           {
-            link: "/javaScript/深入JavaScript高级语法",
+            link: "/javaScript/AlgorithmSort/排序算法",
+            text: "排序算法",
+          },
+          {
+            link: "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法",
             text: "深入JavaScript高级语法",
           },
         ],
@@ -103,17 +111,57 @@ export default defineUserConfig<DefaultThemeOptions>({
     // 侧边栏
     // 不同子路径下的页面会使用不同的侧边栏
     sidebar: {
-      "/javaScript/": [
+      "/frame/Vue2": [
+        {
+          text: "Vue2",
+          children: [
+            "/frame/Vue2/Vue2/01_初体验.md",
+            "/frame/Vue2/Vue2/02_MVVM、插值操作及绑定属性.md",
+            "/frame/Vue2/Vue2/03_动态绑定 style 及计算属性.md",
+            "/frame/Vue2/Vue2/04_事件监听、条件判断及循环的使用.md",
+            "/frame/Vue2/Vue2/05_购物车案例.md",
+            "/frame/Vue2/Vue2/06_表单绑定、组件化及 ES6 语法的补充.md",
+            "/frame/Vue2/Vue2/06_表单绑定、组件化及 ES6 语法的补充.md",
+            "/frame/Vue2/Vue2/07_父子组件之间访问及插槽使用相关.md",
+            "/frame/Vue2/Vue2/08_webpack 的使用及 ES6 相关.md",
+            "/frame/Vue2/Vue2/09_webpack 中的 loader、配置 vue 及插件使用.md",
+            "/frame/Vue2/Vue2/10_webpack 插件相关、配置分离及 CLI 的安装.md",
+            "/frame/Vue2/Vue2/11_webpack 中 VueCLI3 的创建及 ES6 相关.md",
+            "/frame/Vue2/Vue2/12_vue 中的路由基本使用.md",
+            "/frame/Vue2/Vue2/13_动态路由、懒加载、嵌套路由及传递参数相关.md",
+            "/frame/Vue2/Vue2/14_导航守卫、keep-alive、项目相关.md",
+            "/frame/Vue2/Vue2/15_Promise 的使用及了解 Vuex.md",
+            "/frame/Vue2/Vue2/16_Vuex 中各个属性的使用.md",
+            "/frame/Vue2/Vue2/17_网络请求模块 axios 及项目相关.md",
+            "/frame/Vue2/Vue2/18_axios.md",
+            "/frame/Vue2/Vue2/19_项目相关.md",
+          ],
+        },
+      ],
+      "/javaScript/AlgorithmSort": [
+        {
+          text: "排序算法",
+          children: [
+            "/javaScript/AlgorithmSort/排序算法/01_冒泡排序.md",
+            "/javaScript/AlgorithmSort/排序算法/02_选择排序.md",
+            "/javaScript/AlgorithmSort/排序算法/03_插入排序.md",
+            "/javaScript/AlgorithmSort/排序算法/04_希尔排序.md",
+            "/javaScript/AlgorithmSort/排序算法/05_归并排序.md",
+            "/javaScript/AlgorithmSort/排序算法/06_快速排序.md",
+          ],
+        },
+      ],
+      "/javaScript/JavaScriptAdvanced": [
         {
           text: "深入JavaScript高级语法",
           children: [
-            "/javaScript/深入JavaScript高级语法/01_浏览器工作原理和 V8 引擎.md",
-            "/javaScript/深入JavaScript高级语法/02_函数执行过程和作用域链.md",
-            "/javaScript/深入JavaScript高级语法/03_闭包的定义和内存模型.md",
-            "/javaScript/深入JavaScript高级语法/04_内存回收和this绑定规则.md",
-            "/javaScript/深入JavaScript高级语法/05_this绑定规则细节及巩固.md",
-            "/javaScript/深入JavaScript高级语法/06_实现apply、call及bind.md",
-            "/javaScript/深入JavaScript高级语法/07_纯函数-柯里化实现-组合函数.md",
+            "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/01_浏览器工作原理和 V8 引擎.md",
+            "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/02_函数执行过程和作用域链.md",
+            "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/03_闭包的定义和内存模型.md",
+            "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/04_内存回收和this绑定规则.md",
+            "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/05_this绑定规则细节及巩固.md",
+            "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/06_实现apply、call及bind.md",
+            "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/07_纯函数-柯里化实现-组合函数.md",
           ],
         },
       ],
