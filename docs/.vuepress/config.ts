@@ -77,9 +77,15 @@ export default defineUserConfig<DefaultThemeOptions>({
       {
         text: "前端书籍",
         children: [
+          // {
+          //   link: "/books/TypeScript/TypeScript入门教程",
+          //   text: "TypeScript入门教程",
+          // },
+          {
+            link: "/books/ECMAScript6/ECMAScript6入门教程",
+            text: "ECMAScript6入门教程",
+          },
           "/books/TypeScript入门教程.md",
-          "/books/ECMAScript6入门教程.md",
-          "/books/JavaScript高级程序设计(第四版).md",
         ],
       },
       {
@@ -111,6 +117,16 @@ export default defineUserConfig<DefaultThemeOptions>({
     // 侧边栏
     // 不同子路径下的页面会使用不同的侧边栏
     sidebar: {
+      "/books/ECMAScript6": [
+        {
+          text: "ECMAScript6入门教程",
+          children: [
+            "/books/ECMAScript6/ECMAScript6入门教程/01_let和const命令.md",
+            "/books/ECMAScript6/ECMAScript6入门教程/02_变量的解构赋值.md",
+            "/books/ECMAScript6/ECMAScript6入门教程/03_字符串的扩展.md",
+          ],
+        },
+      ],
       "/frame/Vue2": [
         {
           text: "Vue2",
