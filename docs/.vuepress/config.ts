@@ -178,6 +178,7 @@ export default defineUserConfig<DefaultThemeOptions>({
             "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/05_this绑定规则细节及巩固.md",
             "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/06_实现apply、call及bind.md",
             "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/07_纯函数-柯里化实现-组合函数.md",
+            "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/08_with-eval-严格模式-面向对象.md",
           ],
         },
       ],
