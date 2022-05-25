@@ -72,3 +72,16 @@ var p1 = factoryFn("张三", 20, "深圳市");
 var p2 = factoryFn("李四", 30, "杭州市");
 
 console.log(p1, p2);
+
+function foo() {}
+var f1 = new foo();
+
+console.log(foo === foo.prototype.constructor);
+console.log(foo.prototype);
+console.log(Object.getOwnPropertyDescriptors(f1.__proto__));
+console.log(Object.getOwnPropertyDescriptors(foo.prototype));
+console.log(Object.getOwnPropertyDescriptors(foo));
+Object.defineProperty(foo.prototype, "constructor", {
+  enumerable: true,
+});
+console.log(Object.getOwnPropertyDescriptors(foo.prototype));

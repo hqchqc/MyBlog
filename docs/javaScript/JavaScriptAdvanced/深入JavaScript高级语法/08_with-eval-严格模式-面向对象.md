@@ -207,6 +207,41 @@ console.log(Person);
 - 返回值
   - 被传递给函数的对象
 
+### Object.defineProperties
+
+- 该方法可以直接在一个对象上定义多个新的属性或修改现有属性，并且返回该对象
+
+```javascript
+var obj = {
+  _weight: "2kg",
+  set weight(value) {
+    this._weight = value;
+  },
+  get weight() {
+    return this._weight;
+  },
+};
+
+Object.defineProperties(obj, {
+  type: {
+    configurable: false,
+    enumerable: false,
+    value: "animal",
+    writable: false,
+  },
+  weight: {
+    configurable: true,
+    enumerable: true,
+    get: function () {
+      return this._weight;
+    },
+    set: function (value) {
+      this._weight = value;
+    },
+  },
+});
+```
+
 ### 属性描述符分类
 
 属性描述符的类型有两种
