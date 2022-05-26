@@ -85,3 +85,20 @@ Object.defineProperty(foo.prototype, "constructor", {
   enumerable: true,
 });
 console.log(Object.getOwnPropertyDescriptors(foo.prototype));
+
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+
+  this.eating = function () {
+    console.log(this.name + "在吃东西");
+  };
+
+  this.running = function () {
+    console.log(this.name + "在跑步");
+  };
+}
+
+var p1 = new Person("张三", 18);
+var p2 = new Person("李四", 28);
+console.log(p1, p2);
