@@ -102,3 +102,8 @@ function Person(name, age) {
 var p1 = new Person("张三", 18);
 var p2 = new Person("李四", 28);
 console.log(p1, p2);
+
+function Person() {}
+
+console.log(Person.prototype.constructor);
+console.log(p1.__proto__.constructor);
