@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <template id="my-app">
+      <!-- v-cloak 用于隐藏未编译的模板，直到完成 防止还没有被vue解析时出现{{message}}模板语法 但是一般不会出现-->
+      <h2 v-cloak>{{message}}</h2>
+    </template>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+      const App = {
+        template: "#my-app",
+        data() {
+          return {
+            message: "Hello World",
+          };
+        },
+      };
+
+      Vue.createApp(App).mount("#app");
+    </script>
+  </body>
+</html>

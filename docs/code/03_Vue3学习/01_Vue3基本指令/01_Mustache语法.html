@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <template id="my-app">
+      <!-- 1. mustache基本使用 -->
+      <h2>{{message}}</h2>
+      <!-- 2. 是一个表达式 -->
+      <h2>{{count * 10}}</h2>
+      <h2>{{message.split(' ').reverse().join(' ')}}</h2>
+      <!-- 3. 也可以调用函数 -->
+      <!-- 可以使用computed计算属性 -->
+      <h2>{{handleReverse()}}</h2>
+      <!-- 4. 三元运算符 -->
+      <h2>{{isShow ? '显示':'隐藏'}}</h2>
+      <button @click="handleClick">切换</button>
+    </template>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+      const App = {
+        template: "#my-app",
+        data() {
+          return {
+            message: "Hello World",
+            count: 100,
+            isShow: true,
+          };
+        },
+        methods: {
+          handleReverse() {
+            return this.message.split(" ").reverse().join(" ");
+          },
+          handleClick() {
+            this.isShow = !this.isShow;
+          },
+        },
+      };
+
+      Vue.createApp(App).mount("#app");
+    </script>
+  </body>
+</html>

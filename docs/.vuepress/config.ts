@@ -154,6 +154,12 @@ export default defineUserConfig<DefaultThemeOptions>({
           ],
         },
       ],
+      "/frame/Vue3": [
+        {
+          text: "Vue3",
+          children: ["/frame/Vue3/Vue3/01_Vue3模板语法常见的指令.md"],
+        },
+      ],
       "/javaScript/AlgorithmSort": [
         {
           text: "排序算法",
