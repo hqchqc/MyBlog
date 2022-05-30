@@ -11,14 +11,6 @@
 
     <template id="my-app">
       <h2>{{message}}</h2>
-
-      <div :class="['abc','cba']">哈哈哈</div>
-      <div :class="['abc','cba', isActive ? 'active': '']">
-        可以写三元运算符
-      </div>
-      <div :class="['abc','cba',{active: isActive}]">
-        数组中允许嵌套对象语法
-      </div>
     </template>
 
     <script src="https://unpkg.com/vue@3"></script>
@@ -28,7 +20,6 @@
         data() {
           return {
             message: "Hello World",
-            isActive: true,
           };
         },
       };
