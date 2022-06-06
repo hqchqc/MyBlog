@@ -187,6 +187,7 @@ export default defineUserConfig<DefaultThemeOptions>({
             "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/08_with-eval-严格模式-面向对象.md",
             "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/09_对象补充-原型-创建对象.md",
             "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/10_面向对象的原型链和继承实现.md",
+            "/javaScript/JavaScriptAdvanced/深入JavaScript高级语法/11_继承的实现-对象-函数-原型的关系.md",
           ],
         },
       ],
