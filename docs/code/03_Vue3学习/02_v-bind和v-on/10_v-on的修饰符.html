@@ -10,10 +10,11 @@
     <div id="app"></div>
 
     <template id="my-app">
-      <div style="color: red">123</div>
-      <div :style="{color: 'red'}">123</div>
-      <div :style="{color: finalColor}">123</div>
-      <div :style="finalStyle">123</div>
+      <div @click="divClick">
+        <button @click.stop="btnClick">按钮一</button>
+
+        <input @keyup.enter="keyup"></input>
+      </div>
     </template>
 
     <script src="https://unpkg.com/vue@3"></script>
@@ -23,11 +24,18 @@
         data() {
           return {
             message: "Hello World",
-            finalColor: "blue",
-            finalStyle: {
-              fontSize: "22px",
-            },
           };
+        },
+        methods: {
+          btnClick() {
+            console.log("btnClick");
+          },
+          divClick() {
+            console.log("divClick");
+          },
+          keyup(event) {
+            console.log('keyup',event.target.value)
+          }
         },
       };
 

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <template id="my-app">
+      <h2 v-for="item in movies">{{item}}</h2>
+      <ul>
+        <li v-for="(item,index) in movies">{{index}}- {{item}}</li>
+      </ul>
+      <ul>
+        <li v-for="value in info">{{value}}</li>
+
+        <li v-for="(value,key,index) in info">{{value}}-{{key}}-{{index}}</li>
+      </ul>
+
+      <ul>
+        <li v-for="num in 10">{{num}}</li>
+      </ul>
+
+      <input v-model="input" />
+      <button @click="addMovice">添加电影</button>
+    </template>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+      const App = {
+        template: "#my-app",
+        data() {
+          return {
+            message: "Hello World",
+            movies: ["《肖申克的救赎》", "《霸王别姬》", "《这个杀手不太冷》"],
+            info: {
+              name: "张三",
+              age: 18,
+              height: 1.88,
+            },
+            input: "",
+          };
+        },
+        methods: {
+          addMovice() {
+            this.movies.push(this.input);
+          },
+        },
+      };
+
+      Vue.createApp(App).mount("#app");
+    </script>
+  </body>
+</html>

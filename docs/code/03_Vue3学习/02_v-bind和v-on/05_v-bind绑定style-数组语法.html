@@ -10,7 +10,8 @@
     <div id="app"></div>
 
     <template id="my-app">
-      <h2>{{message}}</h2>
+      <!-- 数组中的对象会合并 -->
+      <div :style="[style1Obj,style2Obj]">123</div>
     </template>
 
     <script src="https://unpkg.com/vue@3"></script>
@@ -20,6 +21,8 @@
         data() {
           return {
             message: "Hello World",
+            style1Obj: { color: "red" },
+            style2Obj: { fontSize: "50px" },
           };
         },
       };

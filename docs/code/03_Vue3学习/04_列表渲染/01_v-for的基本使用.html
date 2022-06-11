@@ -10,10 +10,19 @@
     <div id="app"></div>
 
     <template id="my-app">
-      <div style="color: red">123</div>
-      <div :style="{color: 'red'}">123</div>
-      <div :style="{color: finalColor}">123</div>
-      <div :style="finalStyle">123</div>
+      <h2 v-for="item in movies">{{item}}</h2>
+      <ul>
+        <li v-for="(item,index) in movies">{{index}}- {{item}}</li>
+      </ul>
+      <ul>
+        <li v-for="value in info">{{value}}</li>
+
+        <li v-for="(value,key,index) in info">{{value}}-{{key}}-{{index}}</li>
+      </ul>
+
+      <ul>
+        <li v-for="num in 10">{{num}}</li>
+      </ul>
     </template>
 
     <script src="https://unpkg.com/vue@3"></script>
@@ -23,9 +32,11 @@
         data() {
           return {
             message: "Hello World",
-            finalColor: "blue",
-            finalStyle: {
-              fontSize: "22px",
+            movies: ["《肖申克的救赎》", "《霸王别姬》", "《这个杀手不太冷》"],
+            info: {
+              name: "张三",
+              age: 18,
+              height: 1.88,
             },
           };
         },
