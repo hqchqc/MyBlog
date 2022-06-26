@@ -13,6 +13,7 @@
       <h2>{{message}}</h2>
 
       <button @Click="changeInfo">改变info</button>
+      <button @Click="changeFriends">改变friends[0].name</button>
     </template>
 
     <script src="https://unpkg.com/vue@3"></script>
@@ -25,15 +26,23 @@
               name: "qc",
               age: "18",
             },
+            friends: [{ name: "ss" }, { name: "swww" }],
           };
         },
         watch: {
-          info: {
+          // 侦听对象的某一个属性
+          "info.name": {
             handler: function (newInfo, old) {
               console.log(newInfo, old);
             },
             deep: true, // 深度侦听
             immediate: true, // 立即执行
+          },
+          "friends.0.name": {
+            handler: function (newInfo, old) {
+              console.log(newInfo, old);
+            },
+            deep: true, // 深度侦听
           },
         },
         methods: {
@@ -42,6 +51,9 @@
             this.info = {
               name: "qc2",
             };
+          },
+          changeFriends() {
+            this.friends[0].name = "ppp";
           },
         },
       };
