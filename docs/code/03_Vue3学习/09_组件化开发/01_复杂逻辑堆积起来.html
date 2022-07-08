@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <template id="my-app">
+      <input type="text" v-model="message" />
+      <h2>{{message}}</h2>
+
+      <h2>{{title}}</h2>
+      <p>{{desc}}</p>
+
+      <button @click="btnClick">点击</button>
+    </template>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+      const App = {
+        template: "#my-app",
+        data() {
+          return {
+            message: "Hello World",
+            title: "hhh",
+            desc: "呵呵呵呵",
+          };
+        },
+        methods: {
+          btnClick() {
+            this.title = "我是新的标题";
+            this.desc = "我是新的描述";
+          },
+        },
+      };
+
+      Vue.createApp(App).mount("#app");
+    </script>
+  </body>
+</html>
