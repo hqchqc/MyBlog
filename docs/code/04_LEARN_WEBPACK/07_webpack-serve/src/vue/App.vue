@@ -14,6 +14,7 @@ export default {
   data() {
     return {
       title: "厉害",
+      date: "2022-01-01",
     };
   },
 };
