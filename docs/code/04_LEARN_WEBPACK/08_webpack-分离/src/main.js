@@ -7,7 +7,7 @@ import { createApp } from "vue";
 
 import App from "./vue/App";
 
-import "js/element.js";
+import "./js/element.js";
 
 if (module.hot) {
   module.hot.accept("./js/element.js", () => {
