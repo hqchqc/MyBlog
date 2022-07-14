@@ -162,7 +162,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
-      title: "这是一个标题 好强👌",
+      title: "这是一个标题好强👌",
     }),
     new DefinePlugin({
       BASE_TEXT: "'好厉害呀'",
