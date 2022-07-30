@@ -21,7 +21,13 @@
       // 2. 通过mount函数,将vnode挂载到id为app的元素上
       mount(vnode, document.querySelector("#app"));
 
-      // 3. 创建新的vnode  
+      // 3. 创建新的vnode
+      setTimeout(() => {
+        // const vnode1 = h("h2", { class: "coderwhy" }, "hhh");
+        const vnode1 = h("div", { class: "coderwhy" }, "hhh");
+
+        patch(vnode, vnode1);
+      }, 2000);
     </script>
   </body>
 </html>
