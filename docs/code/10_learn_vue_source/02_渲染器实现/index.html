@@ -24,7 +24,10 @@
       // 3. 创建新的vnode
       setTimeout(() => {
         // const vnode1 = h("h2", { class: "coderwhy" }, "hhh");
-        const vnode1 = h("div", { class: "coderwhy" }, "hhh");
+        const vnode1 = h("div", { class: "coderwhy" }, [
+          h("h2", null, "当前计数:100999999"),
+          h("button", null, "+10086"),
+        ]);
 
         patch(vnode, vnode1);
       }, 2000);

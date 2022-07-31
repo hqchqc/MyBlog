@@ -98,8 +98,24 @@ const patch = (n1, n2) => {
         });
       } else {
         // 两个都是数组
+        // 1. 前面有相同节点的原生进行patch操作
         const commonLength = Math.min(oldChildren.length, newChildren.length);
-        if (commonLength < oldChildren.length) {
+        for (let i = 0; i < commonLength; i++) {
+          patch(oldChildren[i], newChildren[i]);
+        }
+
+        // 2. newChildren > oldChildren
+        if (newChildren.length > oldChildren.length) {
+          newChildren.slice(oldChildren.length).forEach((vnode) => {
+            mount(vnode, el);
+          });
+        }
+
+        // 3. newChilcren < oldChildren
+        if (newChildren.length < oldChildren.length) {
+          oldChildren.slice(newChildren.length).forEach((vnode) => {
+            el.removeChild(vnode.el);
+          });
         }
       }
     }
