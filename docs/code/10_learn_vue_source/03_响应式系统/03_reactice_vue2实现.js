@@ -42,9 +42,25 @@ function getDep(target, key) {
   return dep;
 }
 
-// vue3对raw进行数据劫持
+// vue2对raw进行数据劫持
 function reactive(raw) {
-  return new Proxy();
+  Object.keys(raw).forEach((key) => {
+    const dep = getDep(raw, key);
+    let value = raw[key];
+    Object.defineProperty(raw, key, {
+      get() {
+        dep.depend();
+        return value;
+      },
+      set(newValue) {
+        if (value !== newValue) {
+          value = newValue;
+          dep.notify();
+        }
+      },
+    });
+  });
+  return raw;
 }
 
 // 测试代码
