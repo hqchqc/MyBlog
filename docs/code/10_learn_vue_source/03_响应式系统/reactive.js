@@ -79,4 +79,4 @@ watchEffect(function () {
 // dep.notify();
 
 // info.counter++;
-info.name = "lilei1";
+info.name = "lilei";
