@@ -32,7 +32,7 @@ const locale = {
 export default defineUserConfig<DefaultThemeOptions>({
   // 站点配置
   lang: "en-US",
-  title: "beanBag",
+  title: "学习生活",
   description: "记录前端开发日常",
   base: "/",
   head: [
