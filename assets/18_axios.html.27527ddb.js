@@ -1,0 +1,1 @@
+const e={key:"v-59293340",path:"/frame/Vue2/Vue2/18_axios.html",title:"18_axios",lang:"en-US",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:1652633939e3,contributors:[{name:"hqchqc",email:"734986933@qq.com",commits:1}]},filePathRelative:"frame/Vue2/Vue2/18_axios.md"};export{e as data};
